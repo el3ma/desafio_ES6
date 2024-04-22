@@ -2,9 +2,36 @@ import Cliente from "./Clases/Cliente.js";
 import Impuesto from "./Clases/Impuesto.js";
 
 
-let impuesto1 = new Impuesto(2_000_000, 150_000);
-console.log(impuesto1._montoBrutoAnual);
+const formRegistro = document.getElementById("formRegistro");
 
-let cliente1 = new Cliente("Iván", impuesto1);
-console.log(cliente1._impuesto._montoBrutoAnual)
-console.log(cliente1.calcularImpuesto())
+formRegistro.addEventListener("submit", event => {
+    event.preventDefault();
+
+    let datos = new FormData(formRegistro);
+
+    let nombre = datos.get("nombre");
+    let montoBrutoAnual = datos.get("montoBrutoAnual");
+    let deducciones = datos.get("deducciones");
+    
+    let impuesto1 = new Impuesto(montoBrutoAnual, deducciones);
+
+    let cliente1 = new Cliente(nombre, impuesto1);
+
+    console.log(cliente1);
+    console.log(cliente1._impuesto._montoBrutoAnual)
+    console.log(cliente1.calcularImpuesto())
+
+    const lista = document.getElementById("datosCliente")
+    let plantilla = `
+        <p>Nombre : ${cliente1.nombre}</p>
+        <p>Monto Bruto Anual: $${cliente1._impuesto._montoBrutoAnual}</p>
+        <p>Deducciones: $${cliente1._impuesto._deducciones}</p>
+        <p>Impuestos a pagar: $${cliente1.calcularImpuesto()}</p>
+    `;
+
+    lista.innerHTML = plantilla;
+
+})
+
+
+
